@@ -1,4 +1,5 @@
 import prisma from "../database";
+import { conflictError, invalidDateError, maxCharactersError, notFoundError } from "../errors/errors";
 import * as newsRepository from "../repositories/news-repository";
 import { CreateNewsData } from "../repositories/news-repository";
 
@@ -9,10 +10,7 @@ export async function getNews() {
 export async function getSpecificNews(id: number) {
   const news = await newsRepository.readNewsById(id);
   if (!news) {
-    throw {
-      name: "NotFound",
-      message: `News with id ${id} not found.`
-    }
+    throw notFoundError(id);
   }
 
   return news;
@@ -43,28 +41,19 @@ async function validate(newsData: CreateNewsData, isNew = true) {
     });
 
     if (newsWithTitle) {
-      throw {
-        name: "Conflict",
-        message: `News with title ${newsData.title} already exist`
-      }
+      throw conflictError(newsData.title);
     }
   }
 
   // checks news text length
   if (newsData.text.length < 500) {
-    throw {
-      name: "BadRequest",
-      message: "The news text must be at least 500 characters long.",
-    };
+    throw maxCharactersError();
   }
 
   // checks date
   const currentDate = new Date();
   const publicationDate = new Date(newsData.publicationDate);
   if (publicationDate.getTime() < currentDate.getTime()) {
-    throw {
-      name: "BadRequest",
-      message: "The publication date cannot be in the past.",
-    };
+    throw invalidDateError();
   }
 }

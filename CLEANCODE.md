@@ -13,3 +13,7 @@ Complexidade de lógica booleana.
 - função updateNoticia() não mantém o padrão inglês;
 - função removeNoticia() não mantém o padrão inglês;
 - tipo AlterNewsData desnecessário por ser idêntico ao CreateNewsData;
+
+# arquivo: news-service.ts
+
+- A responsabilidade da construção do erro não precisa ser da service;
