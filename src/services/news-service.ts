@@ -1,5 +1,5 @@
 import prisma from "../database";
-import { conflictError, invalidDateError, maxCharactersError, notFoundError } from "../errors/errors";
+import { conflictError, invalidDateError, minCharactersError, notFoundError } from "../errors/errors";
 import * as newsRepository from "../repositories/news-repository";
 import { CreateNewsData } from "../repositories/news-repository";
 
@@ -33,27 +33,28 @@ export async function deleteNews(id: number) {
   return newsRepository.excludeNews(id);
 }
 
-async function validate(newsData: CreateNewsData, isNew = true) {
+async function validate(newsData: CreateNewsData, isNewTitle = true) {
   // validate if news with specific text already exists
-  if (isNew) {
-    const newsWithTitle = await prisma.news.findFirst({
+  if (isNewTitle) {
+    const duplicateNews = await prisma.news.findFirst({
       where: { title: newsData.title }
     });
 
-    if (newsWithTitle) {
+    if (duplicateNews) {
       throw conflictError(newsData.title);
     }
   }
 
   // checks news text length
-  if (newsData.text.length < 500) {
-    throw maxCharactersError();
+  const minCharacters = 500
+  if (newsData.text.length < minCharacters) {
+    throw minCharactersError();
   }
 
   // checks date
   const currentDate = new Date();
   const publicationDate = new Date(newsData.publicationDate);
-  if (publicationDate.getTime() < currentDate.getTime()) {
+  if (publicationDate < currentDate) {
     throw invalidDateError();
   }
 }

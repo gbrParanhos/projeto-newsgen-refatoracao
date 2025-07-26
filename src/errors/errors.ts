@@ -15,7 +15,7 @@ export const conflictError = (title: string): CustomError => new CustomError(
   `News with title ${title} already exist`
 );
 
-export const maxCharactersError = (): CustomError => new CustomError(
+export const minCharactersError = (): CustomError => new CustomError(
   'BadRequest',
   `The news text must be at least 500 characters long.`
 );

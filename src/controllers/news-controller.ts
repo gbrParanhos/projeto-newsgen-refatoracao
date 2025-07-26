@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 
 import * as service from "./../services/news-service";
 
-import { AlterNewsData, CreateNewsData } from "../repositories/news-repository";
+import { CreateNewsData } from "../repositories/news-repository";
 
 export async function getNews(req: Request, res: Response) {
   const news = await service.getNews();
@@ -33,7 +33,7 @@ export async function alterNews(req: Request, res: Response) {
     return res.status(httpStatus.BAD_REQUEST).send("Id is not valid.");
   }
 
-  const newsData = req.body as AlterNewsData;
+  const newsData = req.body as CreateNewsData;
   const alteredNews = await service.alterNews(id, newsData);
 
   return res.send(alteredNews);

@@ -17,3 +17,7 @@ Complexidade de lógica booleana.
 # arquivo: news-service.ts
 
 - A responsabilidade da construção do erro não precisa ser da service;
+- Função validate tem magic number de minimo de caracteres
+- Variavel newsWithTitle é pouco semântica
+- Variaveis currentDate e publicationData não precisam ser convertidas para a lógica booleana
+- Parametro da função validate é pouco semântico isNew na verdade se refere ao título sendo melhor isNewTitle
