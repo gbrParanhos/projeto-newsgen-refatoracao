@@ -1,13 +1,26 @@
+import { QueryParams } from "../controllers/news-controller";
 import prisma from "./../database";
 import { News } from "@prisma/client";
 
 export type CreateNewsData = Omit<News, "id" | "createAt">;
 
-export function listNews() {
+export function listNews({per_page, page, order, title}: QueryParams) {
+  const numberPage = isNaN(Number(page)) || Number(page) <= 0 ? 1 : Number(page);
+  const numberPerPage = isNaN(Number(per_page)) || Number(per_page) <= 0 ? 10 : Number(per_page);
+  const orderBy = order === "asc" ? "asc" : "desc";
+
   return prisma.news.findMany({
+    where: {
+      title: title ? {
+        contains: title,
+        mode: "insensitive"
+      } : undefined
+    },
     orderBy: {
-      publicationDate: "desc"
-    }
+      publicationDate: orderBy
+    },
+    take: numberPerPage,
+    skip: (numberPage - 1) * numberPerPage
   });
 }
 

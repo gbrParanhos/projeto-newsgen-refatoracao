@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { query, Request, Response } from "express";
 import httpStatus from "http-status";
 
 import * as service from "./../services/news-service";
@@ -7,8 +7,16 @@ import { CreateNewsData } from "../repositories/news-repository";
 
 const isInvalidId = (id: number) => isNaN(id) || id <= 0;
 
+export type QueryParams = {
+  per_page?: string;
+  page?: string;
+  order?: "asc" | "desc";
+  title?: string;
+};
+
 export async function getNews(req: Request, res: Response) {
-  const news = await service.getNews();
+  const params = req.query as QueryParams;
+  const news = await service.getNews(params);
   return res.send(news);
 }
 

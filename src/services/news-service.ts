@@ -1,10 +1,12 @@
+import { QueryParams } from "../controllers/news-controller";
 import prisma from "../database";
 import { conflictError, invalidDateError, minCharactersError, notFoundError } from "../errors/errors";
 import * as newsRepository from "../repositories/news-repository";
 import { CreateNewsData } from "../repositories/news-repository";
 
-export async function getNews() {
-  return newsRepository.listNews();
+export async function getNews(params: QueryParams) {
+
+  return newsRepository.listNews(params);
 }
 
 export async function getSpecificNews(id: number) {
