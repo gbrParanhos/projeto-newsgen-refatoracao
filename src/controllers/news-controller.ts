@@ -5,6 +5,8 @@ import * as service from "./../services/news-service";
 
 import { CreateNewsData } from "../repositories/news-repository";
 
+const isInvalidId = (id: number) => isNaN(id) || id <= 0;
+
 export async function getNews(req: Request, res: Response) {
   const news = await service.getNews();
   return res.send(news);
@@ -12,9 +14,7 @@ export async function getNews(req: Request, res: Response) {
 
 export async function getSpecificNews(req: Request, res: Response) {
   const id = parseInt(req.params.id);
-  if (isNaN(id) || id <= 0) {
-    return res.status(httpStatus.BAD_REQUEST).send("Id is not valid.");
-  }
+  if (isInvalidId(id)) return res.status(httpStatus.BAD_REQUEST).send("Id is not valid.");
 
   const news = await service.getSpecificNews(id);
   return res.send(news);
@@ -29,9 +29,7 @@ export async function createNews(req: Request, res: Response) {
 
 export async function alterNews(req: Request, res: Response) {
   const id = parseInt(req.params.id);
-  if (isNaN(id) || id <= 0) {
-    return res.status(httpStatus.BAD_REQUEST).send("Id is not valid.");
-  }
+  if (isInvalidId(id)) return res.status(httpStatus.BAD_REQUEST).send("Id is not valid.");
 
   const newsData = req.body as CreateNewsData;
   const alteredNews = await service.alterNews(id, newsData);
@@ -41,9 +39,7 @@ export async function alterNews(req: Request, res: Response) {
 
 export async function deleteNews(req: Request, res: Response) {
   const id = parseInt(req.params.id);
-  if (isNaN(id) || id <= 0) {
-    return res.status(httpStatus.BAD_REQUEST).send("Id is not valid.");
-  }
+  if (isInvalidId(id)) return res.status(httpStatus.BAD_REQUEST).send("Id is not valid.");
 
   await service.deleteNews(id);
   return res.sendStatus(httpStatus.NO_CONTENT);

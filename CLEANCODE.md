@@ -21,3 +21,7 @@ Complexidade de lógica booleana.
 - Variavel newsWithTitle é pouco semântica
 - Variaveis currentDate e publicationData não precisam ser convertidas para a lógica booleana
 - Parametro da função validate é pouco semântico isNew na verdade se refere ao título sendo melhor isNewTitle
+
+# arquivo: news-controller.ts
+
+- A lógica de validação de ID é repetida em vários lugares, poderia ser extraída para uma função utilitária, além disso é pouco semântica quando não declarada e usada direta no if.
