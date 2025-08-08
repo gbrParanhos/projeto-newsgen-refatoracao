@@ -10,10 +10,9 @@ export default function errorHandlingMiddleware(
   error: Error | AppError,
   req: Request,
   res: Response,
-  next: NextFunction) {
-
-  console.log(error);
-
+  next: NextFunction
+) {
+  
   const { name, message } = error;
   if (name === "NotFound") {
     return res.status(httpStatus.NOT_FOUND).send(message);
@@ -26,7 +25,7 @@ export default function errorHandlingMiddleware(
   } else if (name === "Forbidden") {
     return res.status(httpStatus.FORBIDDEN).send(message);
   } else {
-    return res.status(httpStatus.INTERNAL_SERVER_ERROR);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).send(message);
   }
 
 }

@@ -6,7 +6,7 @@ class CustomError extends Error {
 }
 
 export const notFoundError = (id: number): CustomError => new CustomError(
-  'notFound',
+  'NotFound',
   `News with id ${id} not found.`
 );
 
