@@ -34,6 +34,41 @@ describe("GET /news", () => {
     ]))
   });
 
+  it("should get all news registered paginated", async () => {
+    await persistNewRandomNews();
+    await persistNewRandomNews();
+    await persistNewRandomNews();
+    await persistNewRandomNews();
+    await persistNewRandomNews();
+    await persistNewRandomNews();
+    await persistNewRandomNews();
+    await persistNewRandomNews();
+    await persistNewRandomNews();
+    await persistNewRandomNews();
+    await persistNewRandomNews();
+    await persistNewRandomNews();
+    await persistNewRandomNews();
+    await persistNewRandomNews();
+
+    const result = await api.get("/news").query({
+      per_page: 5,
+      page: 3,
+      order: "desc"
+    });
+    const news = result.body;
+    expect(news).toHaveLength(4);
+    expect(news).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: expect.any(Number),
+        author: expect.any(String),
+        firstHand: expect.any(Boolean),
+        publicationDate: expect.any(String),
+        title: expect.any(String),
+        text: expect.any(String)
+      })
+    ]))
+  });
+
   it("should get a specific id by id", async () => {
     const news = await persistNewRandomNews();
     const { status, body } = await api.get(`/news/${news.id}`);
